@@ -22,7 +22,8 @@ defmodule Exneus.MixProject do
   defp deps do
     [
       # {:euneus, "~> 2.1"},
-      {:euneus, git: "https://github.com/williamthome/euneus", branch: "main"}
+      {:euneus, git: "https://github.com/williamthome/euneus", branch: "main"},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 end
