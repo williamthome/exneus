@@ -1,18 +1,15 @@
 defmodule Exneus do
-  @moduledoc """
-  Documentation for `Exneus`.
-  """
+  def encode!(term, opts \\ %{}) do
+    :euneus.encode(term, norm_encode_opts(opts))
+  end
 
-  @doc """
-  Hello world.
+  def encode_to_iodata!(term, opts \\ %{}) do
+    :euneus.encode_to_iodata(term, norm_encode_opts(opts))
+  end
 
-  ## Examples
-
-      iex> Exneus.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  defp norm_encode_opts(opts) do
+    opts
+    |> Map.put_new(:nulls, [nil])
+    |> Map.put_new_lazy(:proplists, fn -> Map.get(opts, :keyword_lists, false) end)
   end
 end
