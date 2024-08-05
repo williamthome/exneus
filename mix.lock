@@ -1,0 +1,3 @@
+%{
+  "euneus": {:git, "https://github.com/williamthome/euneus", "996c1bf5879432c741aa4ca788f28a2f8470c59c", [branch: "main"]},
+}
