@@ -34,6 +34,7 @@ defmodule Exneus do
   defp norm_encode_opts(opts) do
     opts
     |> Map.put_new(:nulls, [nil])
+    |> Map.put_new(:skip_values, [])
     |> Map.put_new_lazy(:proplists, fn -> Map.get(opts, :keyword_lists, false) end)
     |> Map.put_new(:encode_map, &encode_map/2)
   end
