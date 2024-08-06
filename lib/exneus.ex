@@ -1,6 +1,7 @@
 defmodule Exneus do
   @type encode_options() :: %{
           optional(:codecs) => [:euneus_encoder.codec()],
+          optional(:codec_callback) => :euneus_encoder.codec_callback(),
           optional(:nulls) => [term()],
           optional(:skip_values) => [term()],
           optional(:key_to_binary) => (term() -> binary()),
