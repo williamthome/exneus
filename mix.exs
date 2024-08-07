@@ -7,6 +7,10 @@ defmodule Exneus.MixProject do
       version: "0.1.0",
       elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
+      aliases: aliases(),
+      preferred_cli_env: [
+        ci: :test
+      ],
       deps: deps(),
 
       # Docs
@@ -27,6 +31,16 @@ defmodule Exneus.MixProject do
   def application do
     [
       extra_applications: [:logger]
+    ]
+  end
+
+  defp aliases do
+    [
+      ci: [
+        "compile --warnings-as-errors",
+        "format --check-formatted",
+        "test"
+      ]
     ]
   end
 
