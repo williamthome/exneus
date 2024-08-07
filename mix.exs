@@ -33,8 +33,7 @@ defmodule Exneus.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:euneus, "~> 2.1"},
-      {:euneus, git: "https://github.com/williamthome/euneus", branch: "main"},
+      {:euneus, "~> 2.2"},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false}
     ]
