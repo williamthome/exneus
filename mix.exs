@@ -7,7 +7,19 @@ defmodule Exneus.MixProject do
       version: "0.1.0",
       elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "Exneus",
+      source_url: "https://github.com/williamthome/exneus",
+      homepage_url: "https://github.com/williamthome/exneus",
+      docs: [
+        main: "Exneus",
+        extras: [
+          "README.md": [title: "Overview"],
+          "LICENSE.md": [title: "License"]
+        ]
+      ]
     ]
   end
 
