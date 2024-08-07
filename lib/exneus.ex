@@ -41,11 +41,11 @@ defmodule Exneus do
     |> Map.put_new(:encode_map, &encode_map/2)
   end
 
-  def encode_map(struct, state) when is_map_key(struct, :__struct__) do
+  defp encode_map(struct, state) when is_map_key(struct, :__struct__) do
     :euneus_encoder.encode_map(Map.from_struct(struct), state)
   end
 
-  def encode_map(map, state) do
+  defp encode_map(map, state) do
     :euneus_encoder.encode_map(map, state)
   end
 
