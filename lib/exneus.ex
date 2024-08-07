@@ -49,4 +49,29 @@ defmodule Exneus do
     :euneus_encoder.encode_map(map, state)
   end
 
+  def decode!(json, opts \\ %{}) do
+    :euneus_decoder.decode(json, norm_decode_opts(opts))
+  end
+
+  defp norm_decode_opts(opts) do
+    opts
+    |> Map.put_new(:null, nil)
+    |> Map.put(:object_finish, object_finish_decoder(Map.get(opts, :object_finish, :map)))
+  end
+
+  defp object_finish_decoder(:map) do
+    fn acc, old_acc -> {:maps.from_list(acc), old_acc} end
+  end
+
+  defp object_finish_decoder(:keyword_list) do
+    fn acc, old_acc -> {:lists.reverse(acc), old_acc} end
+  end
+
+  defp object_finish_decoder(:reversed_keyword_list) do
+    fn acc, old_acc -> {acc, old_acc} end
+  end
+
+  defp object_finish_decoder(decoder) when is_function(decoder, 2) do
+    decoder
+  end
 end
