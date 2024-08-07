@@ -23,7 +23,8 @@ defmodule Exneus.MixProject do
     [
       # {:euneus, "~> 2.1"},
       {:euneus, git: "https://github.com/williamthome/euneus", branch: "main"},
-      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false}
     ]
   end
 end
