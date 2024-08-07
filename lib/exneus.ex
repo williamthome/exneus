@@ -24,12 +24,12 @@ defmodule Exneus do
 
   @spec encode!(term(), encode_options()) :: iodata()
   def encode!(term, opts \\ %{}) do
-    :euneus.encode(term, norm_encode_opts(opts))
+    :erlang.iolist_to_binary(:euneus_encoder.encode(term, norm_encode_opts(opts)))
   end
 
   @spec encode_to_iodata!(term(), encode_options()) :: iodata()
   def encode_to_iodata!(term, opts \\ %{}) do
-    :euneus.encode_to_iodata(term, norm_encode_opts(opts))
+    :euneus_encoder.encode(term, norm_encode_opts(opts))
   end
 
   @spec norm_encode_opts(encode_options()) :: :euneus_encoder.options()
