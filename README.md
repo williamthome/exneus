@@ -1,6 +1,8 @@
 # Exneus
 
-An incredibly flexible and performant JSON parser, generator and formatter built on top of [Euneus](https://github.com/williamthome/euneus).
+An incredibly flexible and performant JSON parser, generator and formatter for Elixir.
+
+Exneus is built on top of [Euneus](https://github.com/williamthome/euneus):
 
 > Euneus is built on the top of the new [OTP json module](https://erlang.org/documentation/doc-15.0-rc3/lib/stdlib-6.0/doc/html/json.html).
 >
