@@ -49,10 +49,38 @@ defmodule Exneus do
     :euneus_encoder.encode_map(map, state)
   end
 
+  @type decode_options() :: %{
+          optional(:codecs) => [:euneus_decoder.codec()],
+          optional(:null) => term(),
+          optional(:binary_to_float) => :json.from_binary_fun(),
+          optional(:binary_to_integer) => :json.from_binary_fun(),
+          optional(:array_start) => :json.array_start_fun(),
+          optional(:array_push) => :json.array_push_fun(),
+          optional(:array_finish) =>
+            :ordered
+            | :reversed
+            | :json.array_finish_fun(),
+          optional(:object_start) => :json.object_start_fun(),
+          optional(:object_keys) =>
+            :binary
+            | :copy
+            | :atom
+            | :existing_atom
+            | :json.from_binary_fun(),
+          optional(:object_push) => :json.object_push_fun(),
+          optional(:object_finish) =>
+            :map
+            | :keyword_list
+            | :reversed_keyword_list
+            | :json.object_finish_fun()
+        }
+
+  @spec decode!(binary(), decode_options()) :: term()
   def decode!(json, opts \\ %{}) do
     :euneus_decoder.decode(json, norm_decode_opts(opts))
   end
 
+  @spec norm_decode_opts(decode_options()) :: :euneus_decoder.options()
   defp norm_decode_opts(opts) do
     opts
     |> Map.put_new(:null, nil)
