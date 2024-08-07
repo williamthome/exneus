@@ -6,7 +6,7 @@ defmodule Exneus do
           optional(:skip_values) => [term()],
           optional(:key_to_binary) => (term() -> binary()),
           optional(:sort_keys) => boolean(),
-          optional(:keyword_lists) => boolean() | {true, :euneus_encoder.is_proplist()},
+          optional(:keyword_lists) => boolean() | {true, is_keyword_list()},
           optional(:escape) => (binary() -> iodata()),
           optional(:encode_integer) => :euneus_encoder.encode(integer()),
           optional(:encode_float) => :euneus_encoder.encode(float()),
@@ -19,6 +19,8 @@ defmodule Exneus do
           optional(:encode_reference) => :euneus_encoder.encode(reference()),
           optional(:encode_term) => :euneus_encoder.encode(term())
         }
+
+  @type is_keyword_list() :: :euneus_encoder.is_proplist()
 
   @spec encode!(term(), encode_options()) :: iodata()
   def encode!(term, opts \\ %{}) do
@@ -46,4 +48,5 @@ defmodule Exneus do
   def encode_map(map, state) do
     :euneus_encoder.encode_map(map, state)
   end
+
 end
