@@ -1,4 +1,8 @@
 defmodule Exneus do
+  @moduledoc ~S"""
+  An incredibly flexible and performant JSON parser, generator and formatter for Elixir.
+  """
+
   @type encode_options() :: %{
           optional(:codecs) => [:euneus_encoder.codec()],
           optional(:codec_callback) => :euneus_encoder.codec_callback(),
@@ -23,11 +27,29 @@ defmodule Exneus do
   @type is_keyword_list() :: :euneus_encoder.is_proplist()
 
   @spec encode!(term(), encode_options()) :: iodata()
+  @doc ~S"""
+  Encodes a term into a binary JSON.
+
+  ## Example
+
+      iex> Exneus.encode!(:foo)
+      "\"foo\""
+
+  """
   def encode!(term, opts \\ %{}) do
     :erlang.iolist_to_binary(:euneus_encoder.encode(term, norm_encode_opts(opts)))
   end
 
   @spec encode_to_iodata!(term(), encode_options()) :: iodata()
+  @doc ~S"""
+  Encode a term into an iodata JSON.
+
+  ## Example
+
+      iex> Exneus.encode_to_iodata!(:foo)
+      [?", "foo", ?"]
+
+  """
   def encode_to_iodata!(term, opts \\ %{}) do
     :euneus_encoder.encode(term, norm_encode_opts(opts))
   end
@@ -76,6 +98,15 @@ defmodule Exneus do
         }
 
   @spec decode!(binary(), decode_options()) :: term()
+  @doc ~S"""
+  Decodes a binary JSON into a term.
+
+  ## Example
+
+      iex> Exneus.decode!("\"foo\"")
+      "foo"
+
+  """
   def decode!(json, opts \\ %{}) do
     :euneus_decoder.decode(json, norm_decode_opts(opts))
   end
