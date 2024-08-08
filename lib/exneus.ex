@@ -277,7 +277,9 @@ defmodule Exneus do
             | :json.object_finish_fun()
         }
 
-  @spec decode!(binary(), decode_options()) :: term()
+  @spec decode!(json, options) :: term()
+        when json: binary(),
+             options: decode_options()
   @doc ~S"""
   Decodes a binary JSON into a term.
 
@@ -286,6 +288,186 @@ defmodule Exneus do
       iex> Exneus.decode!("\"foo\"")
       "foo"
 
+  ## Option details
+
+  - `codecs` - Transforms a JSON binary value into an Erlang term.
+    By returning `:next`, the next codec will be called, or by returning
+    `{:halt, term :: term()}`, the term is returned as the value.
+
+    You can use the built-in codecs or your own.
+    Please see the `t::euneus_decoder.codec/0` type for details.
+
+    Default is `[]`.
+
+    Built-in codecs:
+
+    - `timestamp` - Transforms an ISO 8601 string with milliseconds into
+      an `t::erlang.timestamp/0`.
+
+      _Example:_
+
+          iex> Exneus.decode!("\"1970-01-01T00:00:00.000Z\"", %{codecs: [:timestamp]})
+          {0, 0, 0}
+
+    - `datetime` - Transforms an ISO 8601 string into a `t::calendar.datetime/0`.
+
+      _Example:_
+
+          iex> Exneus.decode!("\"1970-01-01T00:00:00Z\"", %{codecs: [:datetime]})
+          {{1970, 01, 01},{00, 00, 00}}
+
+    - `ipv4` - Transforms a JSON string into an `t::inet.ip4_address/0`.
+
+      _Example:_
+
+          iex> Exneus.decode!("\"127.0.0.1\"", %{codecs: [:ipv4]})
+          {127, 0, 0, 1}
+
+    - `ipv6` - Transforms a JSON string into an `t::inet.ip6_address/0`.
+
+      _Example:_
+
+          iex> Exneus.decode!("\"::\"", %{codecs: [:ipv6]})
+          {0, 0, 0, 0, 0, 0, 0, 0}
+          iex> Exneus.decode!("\"::1\"", %{codecs: [:ipv6]})
+          {0, 0, 0, 0, 0, 0, 0, 1}
+          iex> Exneus.decode!("\"::192.168.42.2\"", %{codecs: [:ipv6]})
+          {0, 0, 0, 0, 0, 0, 49320, 10754}
+          iex> Exneus.decode!("\"::ffff:192.168.42.2\"", %{codecs: [:ipv6]})
+          {0, 0, 0, 0, 0, 65535, 49320, 10754}
+          iex> Exneus.decode!("\"3ffe:b80:1f8d:2:204:acff:fe17:bf38\"", %{codecs: [:ipv6]})
+          {16382, 2944, 8077, 2, 516, 44287, 65047, 48952}
+          iex> Exneus.decode!("\"fe80::204:acff:fe17:bf38\"", %{codecs: [:ipv6]})
+          {65152, 0, 0, 0, 516, 44287, 65047, 48952}
+
+    - `pid` - Transforms a JSON string into an `t::erlang.pid/0`.
+
+      _Example:_
+
+          iex> Exneus.decode!("\"<0.92.0>\"", %{codecs: [:pid]})
+          ...> == :erlang.list_to_pid(~c"<0.92.0>")
+          true
+
+    - `port` - Transforms a JSON string into an `t::erlang.port/0`.
+
+      _Example:_
+
+          iex> Exneus.decode!("\"#Port<0.1>\"", %{codecs: [:port]})
+          ...> == :erlang.list_to_port(~c"#Port<0.1>")
+          true
+
+    - `reference` - Transforms a JSON string into an `t::erlang.reference/0`.
+
+      _Example:_
+
+          iex> Exneus.decode!("\"#Ref<0.314572725.1088159747.110918>\"", %{codecs: [:reference]})
+          ...> == :erlang.list_to_ref(~c"#Ref<0.314572725.1088159747.110918>")
+          true
+
+    Custom codec example:
+
+        iex> Exneus.decode!("\"foo\"", %{codecs: [fn ("foo") -> {:halt, :foo} end]})
+        :foo
+
+  - `null` - Defines which term should be considered null.
+
+    Default is `nil`.
+
+    _Example:_
+
+        iex> Exneus.decode!("null", %{null: :null})
+        :null
+
+  - `binary_to_float` - Overrides the default binary to float conversion.
+
+  - `binary_to_integer` - Overrides the default binary to integer conversion..
+
+  - `array_start` - Overrides the `t::json.array_start_fun/0` callback.
+
+  - `array_push` - Overrides the `t::json.array_push_fun/0` callback.
+
+  - `array_finish` - Overrides the `t::json.array_finish_fun/0` callback.
+
+    In addition to the custom function, there are:
+
+    - `ordered` - Returns the array in the same order as the JSON.
+
+      That's the slower option.
+
+      _Example:_
+
+          iex> Exneus.decode!("[1,2,3]", %{array_finish: :ordered})
+          [1,2,3]
+
+    - `reversed` - Returns the array in a reversed order.
+
+      That's the faster option.
+
+      _Example:_
+
+          iex> Exneus.decode!("[1,2,3]", %{array_finish: :reversed})
+          [3,2,1]
+
+    Default is `ordered`.
+
+  - `object_start` - Overrides the `t::json.object_start_fun/0` callback.
+
+  - `object_keys` - Transforms JSON objects key into Erlang term.
+
+    In addition to the custom function, there are:
+
+    - `binary` - Returns the key as `t::erlang.binary/0`.
+    
+    - `copy` - Copies the key via `:binary.copy/1` returning it as `t::erlang.binary/0`.
+
+    - `atom` - Returns the key as `t::erlang.atom/0` via `:erlang.binary_to_atom/2`.
+
+    - `existing_atom` - Returns the key as `t::erlang.atom/0` via
+      `:erlang.binary_to_existing_atom/2`.
+
+    Default is `binary`.
+
+  - `object_push` - Overrides the `t::json.object_push_fun/0` callback.
+
+  - `object_finish` - Overrides the `t::json.object_finish_fun/0` callback.
+
+    In addition to the custom function, there are:
+
+    - `map` - Returns the object as a `t::erlang.map/0`.
+
+      That's the slower option.
+
+      _Example:_
+
+          iex> Exneus.decode!(
+          ...>   "{\"a\":\"a\",\"b\":\"b\",\"c\":\"c\"}",
+          ...>   %{object_finish: :map}
+          ...> )
+          %{<<"a">> => <<"a">>,<<"b">> => <<"b">>,<<"c">> => <<"c">>}
+
+    - `keyword_list` - Returns the object as an ordered `t:keyword/0`.
+
+      _Example:_
+
+          iex> Exneus.decode!(
+          ...>   "{\"a\":\"a\",\"b\":\"b\",\"c\":\"c\"}",
+          ...>   %{object_finish: :keyword_list}
+          ...> )
+          [{"a", "a"},{"b", "b"},{"c", "c"}]
+
+    - `reversed_keyword_list` - Returns the object as a reversed `t:keyword/0`.
+
+      That's the faster option.
+
+      _Example:_
+
+          iex> Exneus.decode!(
+          ...>   "{\"a\":\"a\",\"b\":\"b\",\"c\":\"c\"}",
+          ...>   %{object_finish: :reversed_keyword_list}
+          ...> )
+          [{"c", "c"},{"b", "b"},{"a", "a"}]
+
+    Default is `map`.
   """
   def decode!(json, opts \\ %{}) do
     :euneus_decoder.decode(json, norm_decode_opts(opts))
