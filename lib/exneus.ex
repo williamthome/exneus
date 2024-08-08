@@ -556,6 +556,15 @@ defmodule Exneus do
     :euneus.minify(json)
   end
 
+  @spec minify_to_iodata(json) :: iodata()
+        when json: binary()
+  @doc ~S"""
+  Minifies a binary JSON.
+  """
+  def minify_to_iodata(json) do
+    :euneus.minify_to_iodata(json)
+  end
+
   @spec format(json, options) :: binary()
         when json: binary(),
              options: :euneus_formatter.options()
@@ -603,5 +612,15 @@ defmodule Exneus do
   """
   def format(json, opts) do
     :euneus.format(json, opts)
+  end
+
+  @spec format_to_iodata(json, options) :: iodata()
+        when json: binary(),
+             options: :euneus_formatter.options()
+  @doc ~S"""
+  Formats a binary JSON.
+  """
+  def format_to_iodata(json, opts) do
+    :euneus.format_to_iodata(json, opts)
   end
 end
