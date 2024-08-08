@@ -178,4 +178,42 @@ defmodule Exneus do
   def decode_stream_end!(state) do
     :euneus.decode_stream_end(state)
   end
+
+  @spec minify(json) :: binary()
+        when json: binary()
+  @doc ~S"""
+  Minifies a binary JSON.
+
+  ## Example
+
+      iex> Exneus.minify(" \n{\"foo\"  :  [ true  , \n null ] \n  }  ")
+      "{\"foo\":[true,null]}"
+
+  """
+  def minify(json) do
+    :euneus.minify(json)
+  end
+
+  @spec format(json, options) :: binary()
+        when json: binary(),
+             options: :euneus_formatter.options()
+  @doc ~S"""
+  Formats a binary JSON.
+
+  ## Example
+
+      iex> opts = %{
+      ...>   indent_type: :tabs,
+      ...>   indent_width: 1,
+      ...>   spaced_values: true,
+      ...>   crlf: :n
+      ...> }
+      %{crlf: :n, indent_type: :tabs, indent_width: 1, spaced_values: true}
+      iex> Exneus.format(" \n{\"foo\"  :  [ true  , \n null ] \n  }  ", opts)
+      "{\n\t\"foo\": [\n\t\ttrue,\n\t\tnull\n\t]\n}"
+
+  """
+  def format(json, opts) do
+    :euneus.format(json, opts)
+  end
 end
