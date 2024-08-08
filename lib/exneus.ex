@@ -129,4 +129,53 @@ defmodule Exneus do
   defp object_finish_decoder(decoder) do
     decoder
   end
+
+  @spec decode_stream_start!(json, options) :: result
+        when json: binary(),
+             options: :euneus_decoder.options(),
+             result: :euneus_decoder.stream_result()
+
+  @doc ~S"""
+  Begin parsing a stream of bytes of a JSON value.
+  """
+  def decode_stream_start!(json, opts \\ %{}) do
+    :euneus_decoder.stream_start(json, norm_decode_opts(opts))
+  end
+
+  @spec decode_stream_continue!(json, state) :: result
+        when json: binary() | :end_of_input,
+             state: :euneus_decoder.stream_state(),
+             result: :euneus_decoder.stream_result()
+
+  @doc ~S"""
+  Continue parsing a stream of bytes of a JSON value.
+
+  ## Example
+
+      iex> {:continue, state} = Exneus.decode_stream_start!("{\"foo\":")
+      iex> Exneus.decode_stream_continue!("1}", state)
+      {:end_of_input, %{"foo" => 1}}
+
+  """
+  def decode_stream_continue!(json, state) do
+    :euneus_decoder.stream_continue(json, state)
+  end
+
+  @spec decode_stream_end!(state) :: result
+        when state: :euneus_decoder.stream_state(),
+             result: {:end_of_input, term()}
+
+  @doc ~S"""
+  End parsing a stream of bytes of a JSON value.
+
+  ## Example
+
+      iex> {:continue, state} = Exneus.decode_stream_start!("123")
+      iex> Exneus.decode_stream_end!(state)
+      {:end_of_input, 123}
+
+  """
+  def decode_stream_end!(state) do
+    :euneus.decode_stream_end(state)
+  end
 end
