@@ -2,27 +2,22 @@
 
 An incredibly flexible and performant JSON parser, generator and formatter for Elixir.
 
-Exneus is built on top of [Euneus](https://github.com/williamthome/euneus):
+Exneus is a wrapper for Elixir of [Euneus](https://github.com/williamthome/euneus),
+an Erlang library built on the top of the new [OTP json module](https://erlang.org/documentation/doc-15.0-rc3/lib/stdlib-6.0/doc/html/json.html).
 
-> Euneus is built on the top of the new [OTP json module](https://erlang.org/documentation/doc-15.0-rc3/lib/stdlib-6.0/doc/html/json.html).
->
-> Both encoder and decoder fully conform to [RFC 8259](https://datatracker.ietf.org/doc/html/rfc8259)
-> and [ECMA 404](https://ecma-international.org/publications-and-standards/standards/ecma-404/) standards
-> and are tested using [JSONTestSuite](https://github.com/nst/JSONTestSuite).
->
-> Detailed examples and further explanation can be found at [hexdocs](https://hexdocs.pm/euneus).
+Both encoder and decoder fully conform to [RFC 8259](https://datatracker.ietf.org/doc/html/rfc8259)
+and [ECMA 404](https://ecma-international.org/publications-and-standards/standards/ecma-404/) standards
+and are tested using [JSONTestSuite](https://github.com/nst/JSONTestSuite).
 
-## ⚠️ Disclaimer
-
-Exneus is under development, so the documentation is incomplete and there is no package.
+Further explanation and examples are available at [hexdocs](https://hexdocs.pm/exneus).
 
 ## Installation
 
 ```elixir
 def deps do
   [
-    {:json_polyfill, "~> 0.1"}, # Required only for Elixir < 1.17 / OTP < 27
-    {:exneus, git: "https://github.com/williamthome/exneus", branch: "main"}
+    {:json_polyfill, "~> 0.1"}, # Required only for OTP < 27
+    {:exneus, "~> 0.1"}
   ]
 end
 ```
@@ -35,6 +30,36 @@ iex(1)> Exneus.encode!(%{name: "Joe Armstrong", age: 68, nationality: "British"}
 iex(2)> Exneus.decode!(v(1))
 %{"age" => 68, "name" => "Joe Armstrong", "nationality" => "British"}
 ```
+
+## Encode
+
+Functions that provide JSON encoding:
+
+- `Exneus.encode!/2`
+- `Exneus.encode_to_iodata!/2`
+
+## Decode
+
+Functions that provide JSON decoding:
+
+- `Exneus.decode!/2`
+
+## Stream
+
+Functions that provide JSON decode streaming:
+
+- `Exneus.decode_stream_start!/2`
+- `Exneus.decode_stream_continue!/2`
+- `Exneus.decode_stream_end!/1`
+
+## Format
+
+Functions that provide JSON formatting:
+
+- `Exneus.minify/1`
+- `Exneus.minify_to_iodata/1`
+- `Exneus.format/2`
+- `Exneus.format_to_iodata/2`
 
 ## Benchmark
 
@@ -57,13 +82,21 @@ iex(2)> Exneus.decode!(v(1))
 
 ### Encode
 
+Encode run time comparison:
+
 ![Encode run time](benchmark/assets/encode_run_time.png)
+
+Encode memory usage comparison:
 
 ![Encode memory usage](benchmark/assets/encode_memory_usage.png)
 
 ### Decode
 
+Decode run time comparison:
+
 ![Decode run time](benchmark/assets/decode_run_time.png)
+
+Decode memory usage comparison:
 
 ![Decode memory usage](benchmark/assets/decode_memory_usage.png)
 
