@@ -33,13 +33,17 @@ defmodule Exneus.Benchmark do
           {Benchee.Formatters.Console, comparison: true, extended_statistics: false}
         ] ++
           if opts[:graph] do
-            [{Benchee.Formatters.HTML, file: Path.expand("./report/#{label}/graph/#{label}.html", __DIR__)}]
+            [
+              {Benchee.Formatters.HTML,
+               file: Path.expand("./report/#{label}/graph/#{label}.html", __DIR__)}
+            ]
           else
             []
           end ++
           if opts[:markdown] do
             [
-              {Benchee.Formatters.Markdown, file: Path.expand("./report/#{label}/markdown/#{label}.md", __DIR__)}
+              {Benchee.Formatters.Markdown,
+               file: Path.expand("./report/#{label}/markdown/#{label}.md", __DIR__)}
             ]
           else
             []

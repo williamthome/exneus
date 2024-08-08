@@ -9,20 +9,20 @@ jobs = %{
   "JSON" => &JSON.decode!/1,
   "jsone" => &:jsone.decode/1,
   "jsx" => &:jsx.decode/1,
-  "jiffy" => &:jiffy.decode/1,
+  "jiffy" => &:jiffy.decode/1
 }
 
 data = [
-  "Blockchain",
-  #"Giphy",
-  #"GitHub",
-  #"GovTrack",
-  #"Issue 90",
-  #"JSON Generator (Pretty)",
-  #"JSON Generator",
-  #"Pokedex",
-  #"UTF-8 escaped",
-  #"UTF-8 unescaped"
+  "Blockchain"
+  # "Giphy",
+  # "GitHub",
+  # "GovTrack",
+  # "Issue 90",
+  # "JSON Generator (Pretty)",
+  # "JSON Generator",
+  # "Pokedex",
+  # "UTF-8 escaped",
+  # "UTF-8 unescaped"
 ]
 
 inputs =
@@ -37,12 +37,12 @@ Exneus.Benchmark.run(
   jobs,
   inputs,
   %{
-    #markdown: true,
-    graph: true,
-    #save: true,
-    #parallel: 1,
-    #warmup: 5,
-    #time: 5,
-    #memory_time: 1,
+    # markdown: true,
+    graph: true
+    # save: true,
+    # parallel: 1,
+    # warmup: 5,
+    # time: 5,
+    # memory_time: 1,
   }
 )
