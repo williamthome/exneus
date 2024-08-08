@@ -21,6 +21,7 @@ Exneus is under development, so the documentation is incomplete and there is no 
 ```elixir
 def deps do
   [
+    {:json_polyfill, "~> 0.1"}, # Required only for Elixir < 1.17 / OTP < 27
     {:exneus, git: "https://github.com/williamthome/exneus", branch: "main"}
   ]
 end
