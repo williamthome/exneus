@@ -574,6 +574,32 @@ defmodule Exneus do
       iex> Exneus.format(" \n{\"foo\"  :  [ true  , \n null ] \n  }  ", opts)
       "{\n\t\"foo\": [\n\t\ttrue,\n\t\tnull\n\t]\n}"
 
+  ## Option details
+
+  > #### Note {: .info}
+  >
+  > There is no default for any option, all are required.
+
+  - `indent_type` - Indent using `tabs` or `spaces`.
+
+    - `tabs` - The indent char will be `?\t`.
+
+    - `spaces` - The indent char will be `?\s`.
+
+  - `indent_width` - The `indent_type` will be copied N times based on it.
+
+  - `spaced_values` - Defines if keys and values of objects should be
+    spaced by one `?\s` char.
+
+  - `crlf` - Defines the Carriage Return/Line Feed.
+
+    - `r` - The CRLF will be `"\r"`.
+
+    - `n` - The CRLF will be `"\n"`.
+
+    - `rn` - The CRLF will be `"\r\n"`.
+
+    - `none` - The CRLF will be `""`.
   """
   def format(json, opts) do
     :euneus.format(json, opts)
