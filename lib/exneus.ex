@@ -35,6 +35,186 @@ defmodule Exneus do
       iex> Exneus.encode!(:foo)
       "\"foo\""
 
+  ## Option details
+
+  > #### Note {: .info}
+  >
+  > For better visualization and understanding, all options examples use
+  > `Exneus.encode!/2`, which returns a binary.
+
+  - `codecs` - Transforms tuples into any other Erlang term that will be encoded
+    again into a JSON value. By returning `:next`, the next codec will be called,
+    or by returning `{:halt, term :: term()}`, the term will be encoded again.
+
+    You can use the built-in codecs or your own.
+    Please see the `t::euneus_encoder.codec/0` type for details.
+
+    Default is `[]`.
+
+    Built-in codecs:
+
+    - `timestamp` - Transforms an `t::erlang.timestamp/0` into an ISO 8601 string
+      with milliseconds.
+
+      _Example:_
+
+          iex> Exneus.encode!({0, 0, 0}, %{codecs: [:timestamp]})
+          "\"1970-01-01T00:00:00.000Z\""
+
+    - `datetime` - Transforms a `t::calendar.datetime/0` into an ISO 8601 string.
+
+      _Example:_
+
+          iex> Exneus.encode!({{1970, 01, 01}, {00, 00, 00}}, %{codecs: [:datetime]})
+          "\"1970-01-01T00:00:00Z\""
+
+    - `ipv4` - Transforms an `t::inet.ip4_address/0` into a JSON string.
+
+      _Example:_
+
+          iex> Exneus.encode!({127, 0, 0, 1}, %{codecs: [:ipv4]})
+          "\"127.0.0.1\""
+
+    - `ipv6` - Transforms an `t::inet.ip6_address/0` into a JSON string.
+
+      _Example:_
+
+          iex> Exneus.encode!({0, 0, 0, 0, 0, 0, 0, 0}, %{codecs: [:ipv6]})
+          "\"::\""
+          iex> Exneus.encode!({0, 0, 0, 0, 0, 0, 0, 1}, %{codecs: [:ipv6]})
+          "\"::1\""
+          iex> Exneus.encode!({0, 0, 0, 0, 0, 0, 49320, 10754}, %{codecs: [:ipv6]})
+          "\"::192.168.42.2\""
+          iex> Exneus.encode!({0, 0, 0, 0, 0, 65535, 49320, 10754}, %{codecs: [:ipv6]})
+          "\"::ffff:192.168.42.2\""
+          iex> Exneus.encode!({16382, 2944, 8077, 2, 516, 44287, 65047, 48952}, %{codecs: [:ipv6]})
+          "\"3ffe:b80:1f8d:2:204:acff:fe17:bf38\""
+          iex> Exneus.encode!({65152, 0, 0, 0, 516, 44287, 65047, 48952}, %{codecs: [:ipv6]})
+          "\"fe80::204:acff:fe17:bf38\""
+
+    - `records` - Transforms records into JSON objects.
+
+      _Example:_
+
+          iex> Exneus.encode!(
+          ...>   # Same as `Record.defrecord(:foo, :bar, :baz)`
+          ...>   {:foo, :bar, :baz},
+          ...>   %{codecs: [{:records, %{
+          ...>       # Use `Record.extract/2` to extract those record informations
+          ...>       foo: {[:bar, :baz], 3}
+          ...>   }}]}
+          ...> )
+          "{\"bar\":\"bar\",\"baz\":\"baz\"}"
+
+    Custom codec example:
+
+        iex> Exneus.encode!({:foo}, %{codecs: [fn ({:foo}) -> {:halt, :foo} end]})
+        "\"foo\""
+
+  - `codec_callback` - Overrides the default codec resolver.
+
+    Default is `euneus_encoder.codec_callback/2`.
+
+  - `nulls` - Defines which values should be encoded as null.
+
+    Default is `[nil]`.
+
+    _Example:_
+
+        iex> Exneus.encode!([:null, nil, :foo], %{nulls: [:null, nil]})
+        "[null,null,\"foo\"]"
+
+  - `skip_values` - Defines which map values should be ignored.
+    This option permits achieves the same behavior as Javascript,
+    which ignores undefined values of objects.
+
+    Default is `[]`.
+
+    _Example:_
+
+        iex> Exneus.encode!(
+        ...>   %{foo: :bar, bar: :undefined},
+        ...>   %{skip_values: [:undefined]}
+        ...> )
+        "{\"foo\":\"bar\"}"
+
+  - `key_to_binary` - Overrides the default conversion of map keys to a string.
+
+    Default is `:euneus_encoder.key_to_binary/1` .
+
+  - `sort_keys` - Defines if the object keys should be sorted.
+
+    Default is `false`.
+
+    _Example:_
+
+        iex> Exneus.encode!(%{c: :c, a: :a, b: :b}, %{sort_keys: true})
+        "{\"a\":\"a\",\"b\":\"b\",\"c\":\"c\"}"
+
+  - `keyword_lists` - If true, converts keyword_lists into objects.
+
+    Default is `false`.
+
+    _Example:_
+
+        iex> Exneus.encode!([:baz, foo: :bar], %{keyword_lists: true})
+        "{\"foo\":\"bar\",\"baz\":true}"
+        iex> Exneus.encode!(
+        ...>     [foo: :bar, baz: true],
+        ...>     # Overrides the default is keyword list check:
+        ...>     %{keyword_lists: {true, fn ([{_, _} | _]) -> true end}}
+        ...> )
+        "{\"foo\":\"bar\",\"baz\":true}"
+
+  - `escape` - Overrides the default string escaping.
+
+    Default is `:euneus_encoder.escape/1`.
+
+  - `encode_integer` - Overrides the default integer encoder.
+
+    Default is `:euneus_encoder.encode_integer/2`.
+
+  - `encode_float` - Overrides the default float encoder.
+
+    Default is `:euneus_encoder.encode_float/2`.
+
+  - `encode_atom` - Overrides the default atom encoder.
+
+    Default is `:euneus_encoder.encode_atom/2`.
+
+  - `encode_list` - Overrides the default list encoder.
+
+    Default is `:euneus_encoder.encode_list/2`.
+
+  - `encode_map` - Overrides the default map encoder.
+
+    Default is the private function Exneus.encode_map/2.
+
+  - `encode_tuple` - Overrides the default tuple encoder.
+
+    Default is `:euneus_encoder.encode_tuple/2`, which raises
+    `:unsupported_tuple` error.
+
+  - `encode_pid` - Overrides the default pid encoder.
+
+    Default is `:euneus_encoder.encode_pid/2`, which raises
+    `:unsupported_pid` error.
+
+  - `encode_port` - Overrides the default port encoder.
+
+    Default is `:euneus_encoder.encode_port/2`, which raises
+    `:unsupported_port` error.
+
+  - `encode_reference` - Overrides the default reference encoder.
+
+    Default is `:euneus_encoder.encode_reference/2`, which raises
+    `:unsupported_reference` error.
+
+  - `encode_term` - Overrides the default encoder for unsupported terms,
+    like functions.
+
+    Default is `:euneus_encoder.encode_term/2`, which raises
+    `:unsupported_term` error.
   """
   def encode!(term, opts \\ %{}) do
     :erlang.iolist_to_binary(:euneus_encoder.encode(term, norm_encode_opts(opts)))
