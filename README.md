@@ -65,3 +65,21 @@ iex(2)> Exneus.decode!(v(1))
 ![Decode run time](benchmark/assets/decode_run_time.png)
 
 ![Decode memory usage](benchmark/assets/decode_memory_usage.png)
+
+## Sponsors
+
+If you like this tool, please consider [sponsoring me](https://github.com/sponsors/williamthome).
+I'm thankful for your never-ending support :heart:
+
+I also accept coffees :coffee:
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/williamthome)
+
+## License
+
+Copyright (c) 2024 [William Fank Thomé](https://github.com/williamthome)
+
+Exneus is 100% open-source and community-driven. All components are
+available under the Apache 2 License on [GitHub](https://github.com/williamthome/exneus).
+
+See [LICENSE.md](LICENSE.md) for more information.
