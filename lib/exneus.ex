@@ -87,19 +87,15 @@ defmodule Exneus do
     |> Map.put(:object_finish, object_finish_decoder(Map.get(opts, :object_finish, :map)))
   end
 
-  defp object_finish_decoder(:map) do
-    fn acc, old_acc -> {:maps.from_list(acc), old_acc} end
-  end
-
   defp object_finish_decoder(:keyword_list) do
-    fn acc, old_acc -> {:lists.reverse(acc), old_acc} end
+    :proplist
   end
 
   defp object_finish_decoder(:reversed_keyword_list) do
-    fn acc, old_acc -> {acc, old_acc} end
+    :reversed_proplist
   end
 
-  defp object_finish_decoder(decoder) when is_function(decoder, 2) do
+  defp object_finish_decoder(decoder) do
     decoder
   end
 end
