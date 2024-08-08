@@ -24,12 +24,12 @@ defmodule Exneus do
 
   @spec encode!(term(), encode_options()) :: iodata()
   def encode!(term, opts \\ %{}) do
-    :euneus.encode(term, norm_encode_opts(opts))
+    :erlang.iolist_to_binary(:euneus_encoder.encode(term, norm_encode_opts(opts)))
   end
 
   @spec encode_to_iodata!(term(), encode_options()) :: iodata()
   def encode_to_iodata!(term, opts \\ %{}) do
-    :euneus.encode_to_iodata(term, norm_encode_opts(opts))
+    :euneus_encoder.encode(term, norm_encode_opts(opts))
   end
 
   @spec norm_encode_opts(encode_options()) :: :euneus_encoder.options()
@@ -87,19 +87,15 @@ defmodule Exneus do
     |> Map.put(:object_finish, object_finish_decoder(Map.get(opts, :object_finish, :map)))
   end
 
-  defp object_finish_decoder(:map) do
-    fn acc, old_acc -> {:maps.from_list(acc), old_acc} end
-  end
-
   defp object_finish_decoder(:keyword_list) do
-    fn acc, old_acc -> {:lists.reverse(acc), old_acc} end
+    :proplist
   end
 
   defp object_finish_decoder(:reversed_keyword_list) do
-    fn acc, old_acc -> {acc, old_acc} end
+    :reversed_proplist
   end
 
-  defp object_finish_decoder(decoder) when is_function(decoder, 2) do
+  defp object_finish_decoder(decoder) do
     decoder
   end
 end

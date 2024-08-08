@@ -24,3 +24,6 @@ exneus-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# Benchmark report files
+/benchmark/report/
