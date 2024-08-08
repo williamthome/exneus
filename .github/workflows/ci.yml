@@ -97,6 +97,6 @@ jobs:
 
       - name: Check if build left artifacts
         run: |
-          mix deps.unlock --all
+          mix deps.clean --all
           mix deps.update --all
           git diff --exit-code
