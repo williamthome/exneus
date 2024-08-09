@@ -104,7 +104,11 @@ defmodule Exneus do
           ...>       foo: {[:bar, :baz], 3}
           ...>   }}]}
           ...> )
-          "{\"bar\":\"bar\",\"baz\":\"baz\"}"
+          if String.to_integer(System.otp_release) >= 26 do
+            "{\"bar\":\"bar\",\"baz\":\"baz\"}"
+          else
+            "{\"baz\":\"baz\",\"bar\":\"bar\"}"
+          end
 
     Custom codec example:
 
