@@ -76,7 +76,7 @@ Functions that provide JSON formatting:
 
 See [BENCHMARK.md](/benchmark/BENCHMARK.md) for more information.
 
-### Encode
+### Encode benchmark
 
 ```console
 ##### With input Blockchain #####
@@ -105,7 +105,7 @@ jsx              397.30 KB - 4.72x memory usage +313.11 KB
 JSON             481.30 KB - 5.72x memory usage +397.11 KB
 ```
 
-### Decode
+### Decode benchmark
 
 ```console
 ##### With input Blockchain #####
