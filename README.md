@@ -1,5 +1,16 @@
 # Exneus
 
+[![Github Actions](https://github.com/williamthome/exneus/workflows/CI/badge.svg)](https://github.com/williamthome/exneus/actions)
+[![Coverage](https://raw.githubusercontent.com/cicirello/jacoco-badge-generator/main/tests/100.svg)](https://github.com/williamthome/exneus/actions/workflows/ci.yml)
+[![Elixir Versions](https://img.shields.io/badge/Elixir%2F-12%2B-purple?style=flat-square)](https://elixir-lang.org/)
+[![Erlang Versions](https://img.shields.io/badge/Erlang%2FOTP-24%2B-green?style=flat-square)](http://www.erlang.org)
+[![Latest Release](https://img.shields.io/github/release/williamthome/exneus.svg?style=flat-square)](https://github.com/williamthome/exneus/releases/latest)
+[![Hex Version](https://img.shields.io/hexpm/v/exneus.svg)](https://hex.pm/packages/exneus)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/exneus/)
+[![Total Download](https://img.shields.io/hexpm/dt/exneus.svg)](https://hex.pm/packages/exneus)
+[![License](https://img.shields.io/hexpm/l/exneus.svg)](https://github.com/williamthome/exneus/blob/main/LICENSE)
+[![Last Updated](https://img.shields.io/github/last-commit/williamthome/exneus.svg)](https://github.com/williamthome/exneus/commits/main)
+
 An incredibly flexible and performant JSON parser, generator and formatter for Elixir.
 
 Exneus is a wrapper for Elixir of [Euneus](https://github.com/williamthome/euneus),
