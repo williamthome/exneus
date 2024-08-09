@@ -90,6 +90,7 @@ defmodule Exneus.MixProject do
       main: "Exneus",
       source_ref: "v#{@version}",
       source_url: @source_url,
+      assets: %{"benchmark/assets" => "assets"},
       extras: [
         "README.md": [title: "Overview"],
         "LICENSE.md": [title: "License"],
