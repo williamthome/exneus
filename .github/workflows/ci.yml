@@ -87,7 +87,14 @@ jobs:
             ${{runner.os}}-mix-
 
       # Step: Download project dependencies. If unchanged, uses the cached version.
+      - name: Install dependencies (Polyfill)
+        if: ${{fromJSON(matrix.otp-version) < 27}}
+        run: mix deps.get
+        env:
+          MIX_ENV: polyfill
+
       - name: Install dependencies
+        if: ${{fromJSON(matrix.otp-version) >= 27}}
         run: mix deps.get
 
       # Step: Compile the project treating any warnings as errors.
