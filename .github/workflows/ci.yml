@@ -105,9 +105,10 @@ jobs:
       - name: Run tests
         run: mix test
 
-# - name: Check if build left artifacts
-#   if: ${{env.MIX_ENV != 'polyfill'}}
-#   run: |
-#     mix deps.clean --all
-#     mix deps.update --all
-#     git diff --exit-code
+      # Step: Check deps.
+      - name: Check if build left artifacts
+        if: ${{env.MIX_ENV != 'polyfill'}}
+        run: |
+          mix deps.clean --all --only test
+          mix deps.update --all --only test
+          git diff --exit-code
