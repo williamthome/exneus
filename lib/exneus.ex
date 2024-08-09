@@ -557,7 +557,7 @@ defmodule Exneus do
 
   """
   def minify(json) do
-    :euneus.minify(json)
+    :erlang.iolist_to_binary(minify_to_iodata(json))
   end
 
   @spec minify_to_iodata(json) :: iodata()
@@ -615,7 +615,7 @@ defmodule Exneus do
     - `none` - The CRLF will be `""`.
   """
   def format(json, opts) do
-    :euneus.format(json, opts)
+    :erlang.iolist_to_binary(format_to_iodata(json, opts))
   end
 
   @spec format_to_iodata(json, options) :: iodata()
