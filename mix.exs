@@ -15,6 +15,9 @@ defmodule Exneus.MixProject do
       ],
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
+      test_coverage: [
+        summary: [threshold: 100]
+      ],
 
       # Docs
       name: "Exneus",
