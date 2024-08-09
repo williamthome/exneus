@@ -74,7 +74,7 @@ Functions that provide JSON formatting:
 
 ## Benchmark
 
-See [BENCHMARK.md](/benchmark/BENCHMARK.md) for more information.
+See [BENCHMARK.md](benchmark/BENCHMARK.md) for more information.
 
 ### Encode benchmark
 

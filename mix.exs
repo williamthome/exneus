@@ -92,7 +92,8 @@ defmodule Exneus.MixProject do
       source_url: @source_url,
       extras: [
         "README.md": [title: "Overview"],
-        "LICENSE.md": [title: "License"]
+        "LICENSE.md": [title: "License"],
+        "benchmark/BENCHMARK.md": [title: "Benchmark"]
       ]
     ]
   end
