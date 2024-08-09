@@ -94,6 +94,22 @@ defmodule Exneus do
 
     - `records` - Transforms records into JSON objects.
 
+      _Example:_
+
+          iex> Exneus.encode!(
+          ...>   # Same as `Record.defrecord(:foo, :bar, :baz)`
+          ...>   {:foo, :bar, :baz},
+          ...>   %{codecs: [{:records, %{
+          ...>       # Use `Record.extract/2` to extract those record informations
+          ...>       foo: {[:bar, :baz], 3}
+          ...>   }}]}
+          ...> )
+          if String.to_integer(System.otp_release) >= 26 do
+            "{\"bar\":\"bar\",\"baz\":\"baz\"}"
+          else
+            "{\"baz\":\"baz\",\"bar\":\"bar\"}"
+          end
+
     Custom codec example:
 
         iex> Exneus.encode!({:foo}, %{codecs: [fn ({:foo}) -> {:halt, :foo} end]})
