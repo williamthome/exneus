@@ -104,3 +104,11 @@ jobs:
       # Step: Execute the tests.
       - name: Run tests
         run: mix test
+
+      # Step: Check deps.
+      - name: Check if build left artifacts
+        if: ${{env.MIX_ENV != 'polyfill'}}
+        run: |
+          mix deps.clean --all --only test
+          mix deps.update --all --only test
+          git diff --exit-code

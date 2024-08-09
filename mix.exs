@@ -1,10 +1,13 @@
 defmodule Exneus.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+  @source_url "https://github.com/williamthome/exneus"
+
   def project do
     [
       app: :exneus,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -19,17 +22,14 @@ defmodule Exneus.MixProject do
         summary: [threshold: 100]
       ],
 
+      # Hex
+      description:
+        "An incredibly flexible and performant JSON parser, generator and formatter for Elixir",
+      package: package(),
+
       # Docs
       name: "Exneus",
-      source_url: "https://github.com/williamthome/exneus",
-      homepage_url: "https://github.com/williamthome/exneus",
-      docs: [
-        main: "Exneus",
-        extras: [
-          "README.md": [title: "Overview"],
-          "LICENSE.md": [title: "License"]
-        ]
-      ]
+      docs: docs()
     ]
   end
 
@@ -55,8 +55,8 @@ defmodule Exneus.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:json_polyfill, only: :polyfill, runtime: false},
-      {:euneus, git: "https://github.com/williamthome/euneus", branch: "main"},
+      {:euneus, "~> 2.3"},
+      {:json_polyfill, "~> 0.1", only: :polyfill, runtime: false},
       # dev
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.34", only: :dev, runtime: false},
@@ -75,4 +75,27 @@ defmodule Exneus.MixProject do
 
   defp elixirc_paths(:benchmark), do: ["lib", "benchmark"]
   defp elixirc_paths(_), do: ["lib"]
+
+  defp package do
+    [
+      maintainers: ["William Fank Thomé"],
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => @source_url},
+      files: ~w(.formatter.exs mix.exs README.md CHANGELOG.md lib)
+    ]
+  end
+
+  defp docs do
+    [
+      main: "Exneus",
+      source_ref: "v#{@version}",
+      source_url: @source_url,
+      assets: %{"benchmark/assets" => "assets"},
+      extras: [
+        "README.md": [title: "Overview"],
+        "LICENSE.md": [title: "License"],
+        "benchmark/BENCHMARK.md": [title: "Benchmark"]
+      ]
+    ]
+  end
 end

@@ -2,14 +2,14 @@ Code.eval_file("exneus_benchmark.exs", "./benchmark")
 
 jobs = %{
   "Exneus" => &Exneus.decode!/1,
-  "euneus" => &:euneus.decode/1,
+  "euneus" => fn json -> :euneus.decode(json, %{null: nil}) end,
   "json (OTP)" => &:json.decode/1,
   "thoas" => &:thoas.decode/1,
   "Jason" => &Jason.decode!/1,
   "JSON" => &JSON.decode!/1,
   "jsone" => &:jsone.decode/1,
   "jsx" => &:jsx.decode/1,
-  "jiffy" => &:jiffy.decode/1
+  "jiffy" => fn json -> :jiffy.decode(json, [:return_maps, :use_nil]) end
 }
 
 data = [
@@ -37,8 +37,8 @@ Exneus.Benchmark.run(
   jobs,
   inputs,
   %{
-    # markdown: true,
     graph: true
+    # markdown: true,
     # save: true,
     # parallel: 1,
     # warmup: 5,
