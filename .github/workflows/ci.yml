@@ -28,13 +28,23 @@ jobs:
   ci:
     name: CI OTP-${{matrix.otp-version}} / Elixir ${{matrix.elixir-version}}
 
-    runs-on: ${{matrix.os}}
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        otp-version: [27]
-        elixir-version: ['1.17.2']
-        os: [ubuntu-24.04]
+        include:
+          - otp-version: "24.3"
+            elixir-version: "1.12"
+          - otp-version: "24.3"
+            elixir-version: "1.13"
+          - otp-version: "25.3"
+            elixir-version: "1.14"
+          - otp-version: "26.2"
+            elixir-version: "1.15"
+          - otp-version: "26.2"
+            elixir-version: "1.16"
+          - otp-version: "27.0"
+            elixir-version: "1.17"
 
     steps:
       # Step: Setup Elixir + Erlang image as the base.
