@@ -59,7 +59,7 @@ defmodule Exneus.MixProject do
       {:json_polyfill, "~> 0.1", only: :polyfill, runtime: false},
       # dev
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.34", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.37", only: :dev, runtime: false},
       # benchmark
       {:benchee, "~> 1.1", only: :benchmark, runtime: false},
       {:benchee_html, "~> 1.0", only: :benchmark, runtime: false},
