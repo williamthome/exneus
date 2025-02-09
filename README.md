@@ -1,5 +1,7 @@
 # Exneus
 
+⚠️ **This lib is no longer maintained in favor of the [JSON module introduced in Elixir 1.18](https://github.com/elixir-lang/elixir/pull/14021).**
+
 [![Github Actions](https://github.com/williamthome/exneus/workflows/CI/badge.svg)](https://github.com/williamthome/exneus/actions)
 [![Coverage](https://raw.githubusercontent.com/cicirello/jacoco-badge-generator/main/tests/100.svg)](https://github.com/williamthome/exneus/actions/workflows/ci.yml)
 [![Elixir Versions](https://img.shields.io/badge/Elixir%2F-12%2B-purple?style=flat-square)](https://elixir-lang.org/)
